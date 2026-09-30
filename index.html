@@ -474,13 +474,14 @@ $("okn").onclick=function(){cart={};ren();$("nt").value="";$("ok").classList.rem
 
 // upsell before sending
 var CAT={},usDone=false,FX="<svg class=\"mi\" viewBox=\"0 0 20 24\" aria-hidden=\"true\"><g stroke=\"#b8860b\" stroke-width=\".4\"><rect x=\"4\" y=\"2\" width=\"2.4\" height=\"11\" rx=\".8\" fill=\"#ffcc33\" transform=\"rotate(-10 5 8)\"/><rect x=\"8.8\" y=\"1\" width=\"2.4\" height=\"12\" rx=\".8\" fill=\"#ffd84d\"/><rect x=\"13.4\" y=\"2\" width=\"2.4\" height=\"11\" rx=\".8\" fill=\"#ffcc33\" transform=\"rotate(10 14.6 8)\"/><rect x=\"6.6\" y=\"3\" width=\"2.2\" height=\"10\" rx=\".8\" fill=\"#ffe066\"/><rect x=\"11.2\" y=\"3\" width=\"2.2\" height=\"10\" rx=\".8\" fill=\"#ffe066\"/></g><path d=\"M2.5 10h15l-1.8 12.2a1.4 1.4 0 0 1-1.4 1.2H5.7a1.4 1.4 0 0 1-1.4-1.2z\" fill=\"#fff\" stroke=\"#c9d6f2\" stroke-width=\".8\"/><path d=\"M7 16.4a3 3 0 0 1 6 0z\" fill=\"#1f47d1\"/><rect x=\"7.2\" y=\"16.8\" width=\"5.6\" height=\"2.8\" rx=\".3\" fill=\"#1f47d1\"/></svg>";C.forEach(function(c){c[1].forEach(function(it){CAT[it.n.replace(" 🔥","")]=c[0]})});
-function need(){var fr=false,dr=false;for(var k in cart){var o=OP[k],c=CAT[o.n]||"";if(o.l=="وجبة"||c=="عروض"||/^عرض اليوم/.test(o.n)){fr=true;dr=true}if(c=="فنكر")fr=true;if(c=="مشروبات")dr=true}return{fr:!fr,dr:!dr}}
+function need(){var fr=false,dr=false;for(var k in cart){var o=OP[k],c=CAT[o.n]||"";if(o.l=="وجبة"||c=="عروض"||/^عرض اليوم/.test(o.n)){fr=true;dr=true}if(c=="فنكر")fr=true;if(c=="مشروبات")dr=true}var st=false;for(var k2 in cart){if(CAT[OP[k2].n]=="مقبلات")st=true}return{fr:!fr,dr:!dr,st:!st}}
 function usList(n){var L=[];
   OP.forEach(function(o,i){if(o.off)return;var c=CAT[o.n];
     if(n.fr&&o.n=="قدح فنكر")L.push({i:i,g:"🍟 فنكر",ic:FX});
-    if(n.dr&&c=="مشروبات")L.push({i:i,g:"🥤 مشروبات",ic:IM[o.n]?'<img src="'+IM[o.n]+'" alt="">':""})});return L}
+    if(n.dr&&c=="مشروبات")L.push({i:i,g:"🥤 مشروبات",ic:IM[o.n]?'<img src="'+IM[o.n]+'" alt="">':""})});
+  if(n.st)OP.forEach(function(o,i){if(!o.off&&CAT[o.n]=="مقبلات")L.push({i:i,g:"🥗 مقبلات",ic:'<span style="font-size:26px">🥗</span>'})});return L}
 var usN=null;function usRen(){var n=usN||need(),L=usList(n),h="",g="";
-  $("uss").textContent=n.fr&&n.dr?"ضيف فنكر ومشروب ويا طلبك":n.fr?"ضيف فنكر ويا طلبك":"ضيف مشروب ويا طلبك";
+  $("uss").textContent=(n.fr&&n.dr?"ضيف فنكر ومشروب":n.fr?"ضيف فنكر":"ضيف مشروب")+(n.st?" ومقبلات":"")+" ويا طلبك";
   L.forEach(function(x){var o=OP[x.i],q=cart[x.i]||0;if(x.g!=g){g=x.g;h+='<div class="usgt">'+g+'</div>'}
     h+='<button class="usc'+(q?' in':'')+'" data-u="'+x.i+'"><span class="ui">'+x.ic+'</span><span class="un">'+o.n+(o.l?' ('+o.l+')':'')+'<i>'+f(o.p)+'</i></span><span class="uq">'+(q?'×'+q:'+')+'</span></button>'});
   $("usl").innerHTML=h;return L.length}
